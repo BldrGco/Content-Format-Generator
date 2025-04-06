@@ -33,11 +33,15 @@
         button:hover {
             background-color: #45a049;
         }
-        #output {
+        #output, #title-output, #example-output {
             background-color: #f9f9f9;
             padding: 15px;
             border: 1px solid #ddd;
+            margin-top: 10px;
             white-space: pre-wrap;
+        }
+        h3 {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -55,54 +59,119 @@
         <option value="myth-fact">Myth vs. Fact</option>
     </select>
 
-    <button onclick="generateStructure()">Generate Structure</button>
+    <button onclick="generateContent()">Generate Content</button>
 
+    <h3>Generated Title</h3>
+    <div id="title-output"></div>
+
+    <h3>Structure</h3>
     <div id="output"></div>
 
+    <h3>Example</h3>
+    <div id="example-output"></div>
+
     <script>
-        function generateStructure() {
+        function generateContent() {
             const description = document.getElementById('description').value.trim();
             const format = document.getElementById('format').value;
-            let output = '';
+            let titleOutput = '';
+            let structureOutput = '';
+            let exampleOutput = '';
 
             if (!description) {
-                output = 'Please enter a description!';
+                titleOutput = 'Please enter a description!';
+                structureOutput = '';
+                exampleOutput = '';
             } else {
+                // Generate Title
+                titleOutput = generateTitle(description, format);
+
+                // Generate Structure and Example
                 switch (format) {
                     case 'hook-story-lesson-action':
-                        output = `- Hook: [Attention-grabbing statement related to ${description}]\n` +
-                                 `- Story: [Personal or relatable anecdote about ${description}]\n` +
-                                 `- Lesson: [Key takeaway or insight from the story]\n` +
-                                 `- Actionable You: [Practical step the reader can take]`;
+                        structureOutput = `- Hook: [Attention-grabbing statement related to ${description}]\n` +
+                                         `- Story: [Personal or relatable anecdote about ${description}]\n` +
+                                         `- Lesson: [Key takeaway or insight from the story]\n` +
+                                         `- Actionable You: [Practical step the reader can take]`;
+                        exampleOutput = generateHookStoryExample(description);
                         break;
                     case 'problem-agitation-solution':
-                        output = `- Problem: [Describe the issue with ${description}]\n` +
-                                 `- Agitation: [Amplify the pain or consequences]\n` +
-                                 `- Solution: [Offer a clear resolution]`;
+                        structureOutput = `- Problem: [Describe the issue with ${description}]\n` +
+                                         `- Agitation: [Amplify the pain or consequences]\n` +
+                                         `- Solution: [Offer a clear resolution]`;
+                        exampleOutput = generateProblemAgitationExample(description);
                         break;
                     case 'question-insight-takeaway':
-                        output = `- Question: [Engaging question about ${description}]\n` +
-                                 `- Insight: [Thoughtful observation or answer]\n` +
-                                 `- Takeaway: [Key point to remember]`;
+                        structureOutput = `- Question: [Engaging question about ${description}]\n` +
+                                         `- Insight: [Thoughtful observation or answer]\n` +
+                                         `- Takeaway: [Key point to remember]`;
+                        exampleOutput = generateQuestionInsightExample(description);
                         break;
                     case 'listicle':
-                        output = `- Title: [e.g., "5 Tips for ${description}"]\n` +
-                                 `- Item 1: [First tip]\n` +
-                                 `- Item 2: [Second tip]\n` +
-                                 `- Item 3: [Third tip]\n` +
-                                 `- Item 4: [Fourth tip]\n` +
-                                 `- Item 5: [Fifth tip]`;
+                        structureOutput = `- Title: [e.g., "5 Tips for ${description}"]\n` +
+                                         `- Item 1: [First tip]\n` +
+                                         `- Item 2: [Second tip]\n` +
+                                         `- Item 3: [Third tip]\n` +
+                                         `- Item 4: [Fourth tip]\n` +
+                                         `- Item 5: [Fifth tip]`;
+                        exampleOutput = generateListicleExample(description);
                         break;
                     case 'myth-fact':
-                        output = `- Myth: [Common misconception about ${description}]\n` +
-                                 `- Fact: [Correct information or reality]`;
+                        structureOutput = `- Myth: [Common misconception about ${description}]\n` +
+                                         `- Fact: [Correct information or reality]`;
+                        exampleOutput = generateMythFactExample(description);
                         break;
                     default:
-                        output = 'Select a valid format!';
+                        structureOutput = 'Select a valid format!';
                 }
             }
 
-            document.getElementById('output').textContent = output;
+            document.getElementById('title-output').textContent = titleOutput;
+            document.getElementById('output').textContent = structureOutput;
+            document.getElementById('example-output').textContent = exampleOutput;
+        }
+
+        function generateTitle(description, format) {
+            const base = description.toLowerCase();
+            if (format === 'hook-story-lesson-action') return `Unlock ${description}: A Journey to Success`;
+            if (format === 'problem-agitation-solution') return `Why ${description} Is Harder Than You Think (And How to Fix It)`;
+            if (format === 'question-insight-takeaway') return `Can You Master ${description}? Here’s How`;
+            if (format === 'listicle') return `5 Proven Tips for ${description}`;
+            if (format === 'myth-fact') return `${description}: Busting the Biggest Myths`;
+            return `Your Guide to ${description}`;
+        }
+
+        function generateHookStoryExample(description) {
+            return `- Hook: Struggling with ${description.toLowerCase()}? You’re not alone!\n` +
+                   `- Story: Last year, I hit a wall trying to ${description.toLowerCase()}. Days blurred into nights, and motivation slipped away.\n` +
+                   `- Lesson: I learned that small, consistent steps trump sporadic effort every time.\n` +
+                   `- Actionable You: Set a 15-minute timer daily to focus on ${description.toLowerCase()}—watch the progress stack up!`;
+        }
+
+        function generateProblemAgitationExample(description) {
+            return `- Problem: Many fail at ${description.toLowerCase()} because it feels overwhelming.\n` +
+                   `- Agitation: Without a plan, frustration grows, time slips away, and you’re left burned out.\n` +
+                   `- Solution: Break ${description.toLowerCase()} into bite-sized tasks and tackle one at a time—clarity restores control.`;
+        }
+
+        function generateQuestionInsightExample(description) {
+            return `- Question: Why is ${description.toLowerCase()} so tough to crack?\n` +
+                   `- Insight: It’s not about willpower—it’s about building the right habits.\n` +
+                   `- Takeaway: Consistency beats intensity for ${description.toLowerCase()}.`;
+        }
+
+        function generateListicleExample(description) {
+            return `- Title: 5 Tips for ${description}\n` +
+                   `- Item 1: Start with a clear goal to guide your efforts.\n` +
+                   `- Item 2: Schedule time daily to focus on ${description.toLowerCase()}.\n` +
+                   `- Item 3: Eliminate one distraction that derails you.\n` +
+                   `- Item 4: Reward yourself after small wins.\n` +
+                   `- Item 5: Review progress weekly to stay on track.`;
+        }
+
+        function generateMythFactExample(description) {
+            return `- Myth: You need endless energy to succeed at ${description.toLowerCase()}.\n` +
+                   `- Fact: Smart systems and routines outlast raw effort every time.`;
         }
     </script>
 </body>
