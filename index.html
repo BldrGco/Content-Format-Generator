@@ -153,32 +153,32 @@
             } else {
                 switch (format) {
                     case 'hook-story-lesson-action':
-                        output = `- Hook: [Attention-grabbing statement related to ${description}]\n  *${getRandomPrompt('hook')}*\n` +
-                                 `- Story: [Personal or relatable anecdote about ${description}]\n  *${getRandomPrompt('story')}*\n` +
-                                 `- Lesson: [Key takeaway or insight from the story]\n  *${getRandomPrompt('lesson')}*\n` +
-                                 `- Actionable You: [Practical step the reader can take]\n  *${getRandomPrompt('action')}*`;
+                        output = `- Hook: Grab them with a bold opener\n  *${getRandomPrompt('hook')}*\n` +
+                                 `- Story: Share your journey\n  *${getRandomPrompt('story')}*\n` +
+                                 `- Lesson: Reveal the core truth\n  *${getRandomPrompt('lesson')}*\n` +
+                                 `- Actionable You: Give one clear step\n  *${getRandomPrompt('action')}*`;
                         break;
                     case 'problem-agitation-solution':
-                        output = `- Problem: [Describe the issue with ${description}]\n  *${getRandomPrompt('problem')}*\n` +
-                                 `- Agitation: [Amplify the pain or consequences]\n  *${getRandomPrompt('agitation')}*\n` +
-                                 `- Solution: [Offer a clear resolution]\n  *${getRandomPrompt('solution')}*`;
+                        output = `- Problem: Name the struggle\n  *${getRandomPrompt('problem')}*\n` +
+                                 `- Agitation: Turn up the heat\n  *${getRandomPrompt('agitation')}*\n` +
+                                 `- Solution: Deliver the fix\n  *${getRandomPrompt('solution')}*`;
                         break;
                     case 'question-insight-takeaway':
-                        output = `- Question: [Engaging question about ${description}]\n  *${getRandomPrompt('question')}*\n` +
-                                 `- Insight: [Thoughtful observation or answer]\n  *${getRandomPrompt('insight')}*\n` +
-                                 `- Takeaway: [Key point to remember]\n  *${getRandomPrompt('takeaway')}*`;
+                        output = `- Question: Spark their curiosity\n  *${getRandomPrompt('question')}*\n` +
+                                 `- Insight: Offer a fresh angle\n  *${getRandomPrompt('insight')}*\n` +
+                                 `- Takeaway: Leave them with a gem\n  *${getRandomPrompt('takeaway')}*`;
                         break;
                     case 'listicle':
-                        output = `- Title: [e.g., "5 Tips for ${description}"]\n  *${getRandomPrompt('listItem')}*\n` +
-                                 `- Item 1: [First tip]\n  *${getRandomPrompt('listItem')}*\n` +
-                                 `- Item 2: [Second tip]\n  *${getRandomPrompt('listItem')}*\n` +
-                                 `- Item 3: [Third tip]\n  *${getRandomPrompt('listItem')}*\n` +
-                                 `- Item 4: [Fourth tip]\n  *${getRandomPrompt('listItem')}*\n` +
-                                 `- Item 5: [Fifth tip]\n  *${getRandomPrompt('listItem')}*`;
+                        output = `- Title: Craft a catchy list headline\n  *${getRandomPrompt('listItem')}*\n` +
+                                 `- Item 1: Lead with a strong tip\n  *${getRandomPrompt('listItem')}*\n` +
+                                 `- Item 2: Add a practical idea\n  *${getRandomPrompt('listItem')}*\n` +
+                                 `- Item 3: Mix in a bold move\n  *${getRandomPrompt('listItem')}*\n` +
+                                 `- Item 4: Share a hidden gem\n  *${getRandomPrompt('listItem')}*\n` +
+                                 `- Item 5: End with a bang\n  *${getRandomPrompt('listItem')}*`;
                         break;
                     case 'myth-fact':
-                        output = `- Myth: [Common misconception about ${description}]\n  *${getRandomPrompt('myth')}*\n` +
-                                 `- Fact: [Correct information or reality]\n  *${getRandomPrompt('fact')}*`;
+                        output = `- Myth: Bust a common lie\n  *${getRandomPrompt('myth')}*\n` +
+                                 `- Fact: Drop the real deal\n  *${getRandomPrompt('fact')}*`;
                         break;
                     default:
                         output = 'Select a valid format!';
