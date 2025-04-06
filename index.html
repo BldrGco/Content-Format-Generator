@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Format Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        textarea, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #output {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ddd;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Content Format Generator</h1>
+    <label for="description">Enter a short description:</label>
+    <textarea id="description" rows="4" placeholder="e.g., How to stay motivated while working from home"></textarea>
+
+    <label for="format">Choose a format:</label>
+    <select id="format">
+        <option value="hook-story-lesson-action">Hook, Story, Lesson, Actionable You</option>
+        <option value="problem-agitation-solution">Problem, Agitation, Solution</option>
+        <option value="question-insight-takeaway">Question, Insight, Takeaway</option>
+        <option value="listicle">Listicle (e.g., "5 Tips for...")</option>
+        <option value="myth-fact">Myth vs. Fact</option>
+    </select>
+
+    <button onclick="generateStructure()">Generate Structure</button>
+
+    <div id="output"></div>
+
+    <script>
+        function generateStructure() {
+            const description = document.getElementById('description').value.trim();
+            const format = document.getElementById('format').value;
+            let output = '';
+
+            if (!description) {
+                output = 'Please enter a description!';
+            } else {
+                switch (format) {
+                    case 'hook-story-lesson-action':
+                        output = `- Hook: [Attention-grabbing statement related to ${description}]\n` +
+                                 `- Story: [Personal or relatable anecdote about ${description}]\n` +
+                                 `- Lesson: [Key takeaway or insight from the story]\n` +
+                                 `- Actionable You: [Practical step the reader can take]`;
+                        break;
+                    case 'problem-agitation-solution':
+                        output = `- Problem: [Describe the issue with ${description}]\n` +
+                                 `- Agitation: [Amplify the pain or consequences]\n` +
+                                 `- Solution: [Offer a clear resolution]`;
+                        break;
+                    case 'question-insight-takeaway':
+                        output = `- Question: [Engaging question about ${description}]\n` +
+                                 `- Insight: [Thoughtful observation or answer]\n` +
+                                 `- Takeaway: [Key point to remember]`;
+                        break;
+                    case 'listicle':
+                        output = `- Title: [e.g., "5 Tips for ${description}"]\n` +
+                                 `- Item 1: [First tip]\n` +
+                                 `- Item 2: [Second tip]\n` +
+                                 `- Item 3: [Third tip]\n` +
+                                 `- Item 4: [Fourth tip]\n` +
+                                 `- Item 5: [Fifth tip]`;
+                        break;
+                    case 'myth-fact':
+                        output = `- Myth: [Common misconception about ${description}]\n` +
+                                 `- Fact: [Correct information or reality]`;
+                        break;
+                    default:
+                        output = 'Select a valid format!';
+                }
+            }
+
+            document.getElementById('output').textContent = output;
+        }
+    </script>
+</body>
+</html>
