@@ -5,44 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Content Format Generator</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
-        label {
-            display: block;
-            margin: 10px 0 5px;
-        }
-        textarea, select, button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        #output, #title-output, #example-output {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border: 1px solid #ddd;
-            margin-top: 10px;
-            white-space: pre-wrap;
-        }
-        h3 {
-            margin-top: 20px;
-        }
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
+        h1 { text-align: center; }
+        label { display: block; margin: 10px 0 5px; }
+        textarea, select, button { width: 100%; padding: 10px; margin-bottom: 15px; font-size: 16px; }
+        button { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        #output, #title-output, #example-output { background-color: #f9f9f9; padding: 15px; border: 1px solid #ddd; margin-top: 10px; white-space: pre-wrap; }
+        h3 { margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -71,6 +41,16 @@
     <div id="example-output"></div>
 
     <script>
+        // Simple keyword extractor
+        function extractKeywords(description) {
+            const words = description.toLowerCase().split(' ');
+            return {
+                action: words.find(w => w.match(/stay|work|learn|grow|build/)) || 'achieve',
+                topic: words.find(w => w.match(/motivated|home|productivity|success/)) || 'success',
+                context: words.find(w => w.match(/home|office|daily|life/)) || 'life'
+            };
+        }
+
         function generateContent() {
             const description = document.getElementById('description').value.trim();
             const format = document.getElementById('format').value;
@@ -80,50 +60,10 @@
 
             if (!description) {
                 titleOutput = 'Please enter a description!';
-                structureOutput = '';
-                exampleOutput = '';
             } else {
-                // Generate Title
-                titleOutput = generateTitle(description, format);
-
-                // Generate Structure and Example
-                switch (format) {
-                    case 'hook-story-lesson-action':
-                        structureOutput = `- Hook: [Attention-grabbing statement related to ${description}]\n` +
-                                         `- Story: [Personal or relatable anecdote about ${description}]\n` +
-                                         `- Lesson: [Key takeaway or insight from the story]\n` +
-                                         `- Actionable You: [Practical step the reader can take]`;
-                        exampleOutput = generateHookStoryExample(description);
-                        break;
-                    case 'problem-agitation-solution':
-                        structureOutput = `- Problem: [Describe the issue with ${description}]\n` +
-                                         `- Agitation: [Amplify the pain or consequences]\n` +
-                                         `- Solution: [Offer a clear resolution]`;
-                        exampleOutput = generateProblemAgitationExample(description);
-                        break;
-                    case 'question-insight-takeaway':
-                        structureOutput = `- Question: [Engaging question about ${description}]\n` +
-                                         `- Insight: [Thoughtful observation or answer]\n` +
-                                         `- Takeaway: [Key point to remember]`;
-                        exampleOutput = generateQuestionInsightExample(description);
-                        break;
-                    case 'listicle':
-                        structureOutput = `- Title: [e.g., "5 Tips for ${description}"]\n` +
-                                         `- Item 1: [First tip]\n` +
-                                         `- Item 2: [Second tip]\n` +
-                                         `- Item 3: [Third tip]\n` +
-                                         `- Item 4: [Fourth tip]\n` +
-                                         `- Item 5: [Fifth tip]`;
-                        exampleOutput = generateListicleExample(description);
-                        break;
-                    case 'myth-fact':
-                        structureOutput = `- Myth: [Common misconception about ${description}]\n` +
-                                         `- Fact: [Correct information or reality]`;
-                        exampleOutput = generateMythFactExample(description);
-                        break;
-                    default:
-                        structureOutput = 'Select a valid format!';
-                }
+                const keywords = extractKeywords(description);
+                titleOutput = generateTitle(keywords, format);
+                [structureOutput, exampleOutput] = generateStructureAndExample(keywords, format, description);
             }
 
             document.getElementById('title-output').textContent = titleOutput;
@@ -131,47 +71,48 @@
             document.getElementById('example-output').textContent = exampleOutput;
         }
 
-        function generateTitle(description, format) {
-            const base = description.toLowerCase();
-            if (format === 'hook-story-lesson-action') return `Unlock ${description}: A Journey to Success`;
-            if (format === 'problem-agitation-solution') return `Why ${description} Is Harder Than You Think (And How to Fix It)`;
-            if (format === 'question-insight-takeaway') return `Can You Master ${description}? Here’s How`;
-            if (format === 'listicle') return `5 Proven Tips for ${description}`;
-            if (format === 'myth-fact') return `${description}: Busting the Biggest Myths`;
-            return `Your Guide to ${description}`;
+        function generateTitle(keywords, format) {
+            const { action, topic, context } = keywords;
+            const variations = {
+                'hook-story-lesson-action': `How to ${action} ${topic} in Your ${context}`,
+                'problem-agitation-solution': `The Hidden Struggle of ${topic} in ${context}`,
+                'question-insight-takeaway': `Can You ${action} ${topic} Every Day?`,
+                'listicle': `5 Ways to ${action} ${topic} in ${context}`,
+                'myth-fact': `${topic} Myths You Believe About ${context}`
+            };
+            return variations[format] || `Mastering ${topic} in ${context}`;
         }
 
-        function generateHookStoryExample(description) {
-            return `- Hook: Struggling with ${description.toLowerCase()}? You’re not alone!\n` +
-                   `- Story: Last year, I hit a wall trying to ${description.toLowerCase()}. Days blurred into nights, and motivation slipped away.\n` +
-                   `- Lesson: I learned that small, consistent steps trump sporadic effort every time.\n` +
-                   `- Actionable You: Set a 15-minute timer daily to focus on ${description.toLowerCase()}—watch the progress stack up!`;
-        }
+        function generateStructureAndExample(keywords, format, description) {
+            const { action, topic, context } = keywords;
+            let structure = '';
+            let example = '';
 
-        function generateProblemAgitationExample(description) {
-            return `- Problem: Many fail at ${description.toLowerCase()} because it feels overwhelming.\n` +
-                   `- Agitation: Without a plan, frustration grows, time slips away, and you’re left burned out.\n` +
-                   `- Solution: Break ${description.toLowerCase()} into bite-sized tasks and tackle one at a time—clarity restores control.`;
-        }
+            switch (format) {
+                case 'hook-story-lesson-action':
+                    structure = `- Hook: [Grab attention with ${topic}]\n- Story: [Anecdote about ${context}]\n- Lesson: [Insight from ${action}ing]\n- Actionable You: [Step to ${action} ${topic}]`;
+                    example = `- Hook: Tired of losing ${topic} in ${context}?\n- Story: I once spent weeks in ${context} failing to ${action}, until a friend showed me a trick.\n- Lesson: ${action}ing ${topic} starts with focus.\n- Actionable You: Try a 10-minute ${topic} boost each morning.`;
+                    break;
+                case 'problem-agitation-solution':
+                    structure = `- Problem: [Issue with ${topic}]\n- Agitation: [Why it’s tough in ${context}]\n- Solution: [How to ${action} it]`;
+                    example = `- Problem: ${topic} slips away in ${context}.\n- Agitation: Distractions pile up, and you’re left drained.\n- Solution: ${action} with a simple schedule tweak.`;
+                    break;
+                case 'question-insight-takeaway':
+                    structure = `- Question: [Query about ${topic}]\n- Insight: [Truth behind ${action}ing]\n- Takeaway: [Key for ${context}]`;
+                    example = `- Question: Why can’t we ${action} ${topic}?\n- Insight: It’s less about time, more about intent.\n- Takeaway: Small wins in ${context} add up.`;
+                    break;
+                case 'listicle':
+                    structure = `- Title: [e.g., "5 Ways to ${action} ${topic}"]\n- Item 1: [Tip 1]
 
-        function generateQuestionInsightExample(description) {
-            return `- Question: Why is ${description.toLowerCase()} so tough to crack?\n` +
-                   `- Insight: It’s not about willpower—it’s about building the right habits.\n` +
-                   `- Takeaway: Consistency beats intensity for ${description.toLowerCase()}.`;
-        }
-
-        function generateListicleExample(description) {
-            return `- Title: 5 Tips for ${description}\n` +
-                   `- Item 1: Start with a clear goal to guide your efforts.\n` +
-                   `- Item 2: Schedule time daily to focus on ${description.toLowerCase()}.\n` +
-                   `- Item 3: Eliminate one distraction that derails you.\n` +
-                   `- Item 4: Reward yourself after small wins.\n` +
-                   `- Item 5: Review progress weekly to stay on track.`;
-        }
-
-        function generateMythFactExample(description) {
-            return `- Myth: You need endless energy to succeed at ${description.toLowerCase()}.\n` +
-                   `- Fact: Smart systems and routines outlast raw effort every time.`;
+- Item 2: [Tip 2]\n- Item 3: [Tip 3]\n- Item 4: [Tip 4]\n- Item 5: [Tip 5]`;
+                    example = `- Title: 5 Ways to ${action} ${topic} in ${context}\n- Item 1: Set a clear goal.\n- Item 2: Cut one distraction.\n- Item 3: Timebox your effort.\n- Item 4: Track your wins.\n- Item 5: Adjust weekly.`;
+                    break;
+                case 'myth-fact':
+                    structure = `- Myth: [Misconception about ${topic}]\n- Fact: [Reality in ${context}]`;
+                    example = `- Myth: You need hours to ${action} ${topic}.\n- Fact: Short bursts in ${context} work better.`;
+                    break;
+            }
+            return [structure, example];
         }
     </script>
 </body>
