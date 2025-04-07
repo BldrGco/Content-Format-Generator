@@ -146,6 +146,8 @@ function extractKeywords(description) {
             if (word === "business") return "work";
             if (word === "success") return "success";
             if (word === "fear") return "emotion";
+            if (word === "problem") return "obstacle"; // Broaden 'problem'
+            if (word === "question") return "curiosity"; // Broaden 'question'
             return word;
         });
 }
@@ -165,12 +167,12 @@ function getRandomPrompt(type, description = "") {
             prompt.tags.some(tag => keywords.includes(tag))
         );
     }
-    if (matchingPrompts.length === 0) matchingPrompts = prompts;
+    // If too few matches, use all prompts to force variety
+    if (matchingPrompts.length <= 2) matchingPrompts = prompts;
 
     do {
         selectedPrompt = matchingPrompts[Math.floor(Math.random() * matchingPrompts.length)].text;
         attempt++;
-        // Avoid last used prompt and recent prompts within this generation
         if (attempt >= maxAttempts || 
             (selectedPrompt !== lastUsedPrompts[type] && !recentPrompts[type].includes(selectedPrompt))) {
             break;
@@ -181,7 +183,10 @@ function getRandomPrompt(type, description = "") {
         recentPrompts[type].shift();
     }
     recentPrompts[type].push(selectedPrompt);
-    lastUsedPrompts[type] = selectedPrompt; // Update last used
+    lastUsedPrompts[type] = selectedPrompt;
+
+    // Debug log (remove later)
+    console.log(`Type: ${type}, Selected: ${selectedPrompt}, Matches: ${matchingPrompts.length}`);
 
     return selectedPrompt;
 }
@@ -191,7 +196,6 @@ function generateStructure() {
     const format = document.getElementById('format').value;
     let output = '';
 
-    // Reset recentPrompts for each generation
     for (let key in recentPrompts) {
         recentPrompts[key] = [];
     }
