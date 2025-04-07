@@ -116,6 +116,23 @@ const recentPrompts = {
     you: []
 };
 
+const lastUsedPrompts = {
+    hook: null,
+    story: null,
+    lesson: null,
+    action: null,
+    problem: null,
+    agitation: null,
+    solution: null,
+    question: null,
+    insight: null,
+    takeaway: null,
+    listItem: null,
+    myth: null,
+    fact: null,
+    you: null
+};
+
 function extractKeywords(description) {
     const commonWords = ["the", "a", "an", "and", "or", "but", "to", "in", "on", "at", "is", "are"];
     return description
@@ -153,7 +170,9 @@ function getRandomPrompt(type, description = "") {
     do {
         selectedPrompt = matchingPrompts[Math.floor(Math.random() * matchingPrompts.length)].text;
         attempt++;
-        if (attempt >= maxAttempts || !recentPrompts[type].includes(selectedPrompt)) {
+        // Avoid last used prompt and recent prompts within this generation
+        if (attempt >= maxAttempts || 
+            (selectedPrompt !== lastUsedPrompts[type] && !recentPrompts[type].includes(selectedPrompt))) {
             break;
         }
     } while (true);
@@ -162,6 +181,7 @@ function getRandomPrompt(type, description = "") {
         recentPrompts[type].shift();
     }
     recentPrompts[type].push(selectedPrompt);
+    lastUsedPrompts[type] = selectedPrompt; // Update last used
 
     return selectedPrompt;
 }
