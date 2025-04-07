@@ -171,11 +171,16 @@ function generateStructure() {
     const format = document.getElementById('format').value;
     let output = '';
 
+    // Reset recentPrompts for each generation
+    for (let key in recentPrompts) {
+        recentPrompts[key] = [];
+    }
+
     if (!description) {
         output = 'Please enter a description!';
     } else {
         switch (format) {
-            case 'hook-story-lesson-action': // Updated to reflect five parts
+            case 'hook-story-lesson-action':
                 output = `- Hook: Grab them with a bold opener\n  *${getRandomPrompt('hook', description)}*\n` +
                          `- Story: Share your journey\n  *${getRandomPrompt('story', description)}*\n` +
                          `- Lesson: Reveal the core truth\n  *${getRandomPrompt('lesson', description)}*\n` +
