@@ -1314,12 +1314,45 @@ const creativePrompts = {
         "Cut a proof that cuts gold."
     ]
 };
-
-// Leave your getRandomPrompt and generateStructure functions as they are below this
+const recentPrompts = {
+    hook: [],
+    story: [],
+    lesson: [],
+    action: [],
+    problem: [],
+    agitation: [],
+    solution: [],
+    question: [],
+    insight: [],
+    takeaway: [],
+    listItem: [],
+    myth: [],
+    fact: [],
+    you: []
+};
 
 function getRandomPrompt(type) {
     const prompts = creativePrompts[type] || [];
-    return prompts[Math.floor(Math.random() * prompts.length)] || "Get creative here!";
+    if (prompts.length === 0) return "Get creative here!";
+
+    const maxAttempts = 10;
+    let attempt = 0;
+    let selectedPrompt;
+
+    do {
+        selectedPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+        attempt++;
+        if (attempt >= maxAttempts || !recentPrompts[type].includes(selectedPrompt)) {
+            break;
+        }
+    } while (true);
+
+    if (recentPrompts[type].length >= 10) {
+        recentPrompts[type].shift();
+    }
+    recentPrompts[type].push(selectedPrompt);
+
+    return selectedPrompt;
 }
 
 function generateStructure() {
